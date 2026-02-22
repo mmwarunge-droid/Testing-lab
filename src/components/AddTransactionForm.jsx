@@ -11,16 +11,22 @@ function AddTransactionForm({ onAddTransaction }) {
   function handleChange(e) {
     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "amount" ? value : value,
+    }));
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onAddTransaction(formData);
+    // Normalize amount to number if possible
+    const payload = {
+      ...formData,
+      amount: formData.amount === "" ? "" : Number(formData.amount),
+    };
+
+    onAddTransaction(payload);
 
     setFormData({
       date: "",
